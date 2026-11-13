@@ -30,6 +30,36 @@ function Carrot(): React.JSX.Element {
   )
 }
 
+/** Held open towards the bunny, so we see the cover. */
+function Book(): React.JSX.Element {
+  return (
+    <g strokeLinejoin="round">
+      {/* Page edges peeking over the top of the cover */}
+      <path
+        d="M76 148.5 Q88 144.5 100 149 Q112 144.5 124 148.5 L124 153 Q112 149 100 153.5 Q88 149 76 153Z"
+        fill="#fffaf5"
+        stroke="#e2c4b6"
+        strokeWidth={1.4}
+      />
+      <path
+        d="M73 151 Q86.5 146.5 100 151.5 Q113.5 146.5 127 151 L127 173 Q113.5 168.5 100 173.5 Q86.5 168.5 73 173Z"
+        fill="#9fd8f0"
+        stroke="#6fb6d6"
+        strokeWidth={2}
+      />
+      <path d="M100 151.5 V173.5" stroke="#6fb6d6" strokeWidth={2} strokeLinecap="round" />
+      {/* A carrot on the cover, naturally */}
+      <g transform="translate(113.5 153.5) rotate(24) scale(0.62)">
+        <path d="M-3 0 Q-5 -6 -1.5 -7 Q0 -4 0 -1 Q1 -5 4 -6.5 Q6 -3 3 0Z" fill="#7fcf8f" />
+        <path
+          d="M0 20 Q-2 19 -2.5 16 L-5 3 Q-5 -1 0 -1 Q5 -1 5 3 L2.5 16 Q2 19 0 20Z"
+          fill="#ffa24a"
+        />
+      </g>
+    </g>
+  )
+}
+
 function TeaCup(): React.JSX.Element {
   return (
     <g transform="translate(0 6)">
@@ -81,8 +111,8 @@ const PAWS: Record<BunnyMood, [left: [number, number], right: [number, number]]>
     [112, 165]
   ],
   focus: [
-    [89, 163],
-    [111, 163]
+    [75, 164],
+    [125, 164]
   ],
   paused: [
     [88, 165],
@@ -102,13 +132,13 @@ const PAWS: Record<BunnyMood, [left: [number, number], right: [number, number]]>
   ]
 }
 
-/** The break-time snack plus the paws that hold it. */
+/** Whatever the bunny is holding (carrot, tea, book) plus the paws that hold it. */
 export function Treats({ mood }: { mood: BunnyMood }): React.JSX.Element {
   const [left, right] = PAWS[mood]
   return (
     <g>
       <AnimatePresence initial={false}>
-        {(mood === 'snack' || mood === 'tea') && (
+        {(mood === 'snack' || mood === 'tea' || mood === 'focus') && (
           <motion.g
             key={mood}
             initial={{ scale: 0, y: 26, opacity: 0 }}
@@ -116,7 +146,7 @@ export function Treats({ mood }: { mood: BunnyMood }): React.JSX.Element {
             exit={{ scale: 0, y: 26, opacity: 0, transition: { duration: 0.15 } }}
             transition={SPRING_BOUNCY}
           >
-            {mood === 'snack' ? <Carrot /> : <TeaCup />}
+            {mood === 'snack' ? <Carrot /> : mood === 'tea' ? <TeaCup /> : <Book />}
           </motion.g>
         )}
       </AnimatePresence>

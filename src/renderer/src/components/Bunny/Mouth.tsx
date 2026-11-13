@@ -13,8 +13,19 @@ const stroke = {
 function shape(mood: BunnyMood): React.JSX.Element {
   switch (mood) {
     case 'focus':
-      // A small, serious line.
-      return <path d="M96 135 Q100 136.2 104 135" {...stroke} />
+      // Tongue poking out in concentration.
+      return (
+        <>
+          <path
+            d="M100.5 135.6 Q101.5 141.5 105 140.6 Q107.6 139.6 106 135.2Z"
+            fill="#ff8fae"
+            stroke={INK}
+            strokeWidth={1.6}
+            strokeLinejoin="round"
+          />
+          <path d="M94.5 134.6 Q100 136.6 107 134.6" {...stroke} />
+        </>
+      )
     case 'paused':
       // A tiny "o?"
       return <ellipse cx={100} cy={136} rx={2.8} ry={3.4} fill="#d9728f" />

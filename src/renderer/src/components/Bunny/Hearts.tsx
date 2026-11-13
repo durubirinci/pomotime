@@ -21,7 +21,7 @@ interface HeartsProps {
   count?: number
 }
 
-/** Little hearts that float up and fade when a session is complete. */
+/** Little hearts that float up, and sparkles that twinkle, when a session is complete. */
 export function Hearts({ seed, count = 9 }: HeartsProps): React.JSX.Element {
   const hearts = useMemo(() => {
     const random = seededRandom(seed)
@@ -37,8 +37,40 @@ export function Hearts({ seed, count = 9 }: HeartsProps): React.JSX.Element {
     }))
   }, [seed, count])
 
+  const sparkles = useMemo(() => {
+    const random = seededRandom(seed + 101)
+    return Array.from({ length: 6 }, (_, index) => ({
+      id: `${seed}-sparkle-${index}`,
+      left: 4 + random() * 88,
+      top: 6 + random() * 70,
+      size: 10 + random() * 9,
+      delay: 0.1 + index * 0.4 + random() * 0.2
+    }))
+  }, [seed])
+
   return (
     <div className="pointer-events-none absolute inset-0 z-20" aria-hidden>
+      {sparkles.map((sparkle) => (
+        <motion.svg
+          key={sparkle.id}
+          viewBox="0 0 24 24"
+          width={sparkle.size}
+          height={sparkle.size}
+          className="absolute"
+          style={{ left: `${sparkle.left}%`, top: `${sparkle.top}%` }}
+          initial={{ scale: 0, rotate: 0, opacity: 0 }}
+          animate={{ scale: [0, 1.25, 0], rotate: 90, opacity: [0, 1, 0] }}
+          transition={{ duration: 0.9, delay: sparkle.delay, ease: 'easeInOut' }}
+        >
+          <path
+            d="M12 1 Q13 10 23 12 Q13 14 12 23 Q11 14 1 12 Q11 10 12 1Z"
+            fill="#fff3ad"
+            stroke="#ffc94f"
+            strokeWidth={1.2}
+            strokeLinejoin="round"
+          />
+        </motion.svg>
+      ))}
       {hearts.map((heart) => (
         <motion.svg
           key={heart.id}

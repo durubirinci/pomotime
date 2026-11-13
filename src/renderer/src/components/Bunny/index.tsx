@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useGaze } from '@renderer/hooks/useGaze'
 import { useRandomPulse } from '@renderer/hooks/useRandomPulse'
 import { SPRING_BOUNCY, SPRING_SOFT } from '@renderer/lib/theme'
 import { Blush } from './Blush'
@@ -40,6 +41,23 @@ function useHop(active: boolean): boolean {
   return airborne
 }
 
+const POKE_MS = 1100
+
+/** Give the bunny a poke and it beams at you for a moment. */
+function usePoke(): { poked: boolean; pokeCount: number; poke: () => void } {
+  const [poked, setPoked] = useState(false)
+  const [pokeCount, setPokeCount] = useState(0)
+  const timeout = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(() => () => clearTimeout(timeout.current), [])
+  const poke = (): void => {
+    setPoked(true)
+    setPokeCount((count) => count + 1)
+    clearTimeout(timeout.current)
+    timeout.current = setTimeout(() => setPoked(false), POKE_MS)
+  }
+  return { poked, pokeCount, poke }
+}
+
 /**
  * Invisible box that pins a group's bounding box, so "origin: bottom centre"
  * stays in the same place even while ears and paws move around inside it.
@@ -65,9 +83,22 @@ export function Bunny({ mood, closeUp = false, className }: BunnyProps): React.J
   const twitching = useRandomPulse(3200, 7000, 120)
   const wiggling = useRandomPulse(5000, 11000, 160)
   const airborne = useHop(mood === 'celebrate')
+  const { poked, pokeCount, poke } = usePoke()
+  const svgRef = useRef<SVGSVGElement>(null)
+  // It watches your cursor, unless it is busy concentrating.
+  const gaze = useGaze(svgRef, mood === 'idle' || mood === 'paused')
+  // The face lights up when poked; ears, paws and props carry on as they were.
+  const face: BunnyMood = poked ? 'celebrate' : mood
 
   return (
-    <svg viewBox="0 0 200 200" className={className} role="img" aria-label={`bunny, ${mood}`}>
+    <svg
+      ref={svgRef}
+      viewBox="0 0 200 200"
+      className={className}
+      role="img"
+      aria-label={`bunny, ${mood}`}
+      onPointerDown={poke}
+    >
       <defs>
         {/* White fur that warms to pink underneath, which gives each shape some roundness. */}
         <linearGradient id="bunny-fur" x1="0" y1="0" x2="0" y2="1">
@@ -125,8 +156,14 @@ export function Bunny({ mood, closeUp = false, className }: BunnyProps): React.J
               {/* Tail, body and feet */}
               <circle cx={131} cy={178} r={9} {...furStroke} />
               <ellipse cx={100} cy={169} rx={31} ry={23} {...furStroke} />
-              <ellipse cx={81} cy={189} rx={13.5} ry={7.2} {...furStroke} />
-              <ellipse cx={119} cy={189} rx={13.5} ry={7.2} {...furStroke} />
+              {/* Soft shadow the head casts on the chest */}
+              <ellipse cx={100} cy={160} rx={26} ry={9} fill="#f3c2d3" opacity={0.5} />
+              {[81, 119].map((cx) => (
+                <g key={cx}>
+                  <ellipse cx={cx} cy={189} rx={13.5} ry={7.2} {...furStroke} />
+                  <ellipse cx={cx} cy={190.5} rx={5.5} ry={2.6} fill="#ffc4d4" />
+                </g>
+              ))}
 
               {/* Head: the ears ride along when it tilts */}
               <motion.g
@@ -149,15 +186,47 @@ export function Bunny({ mood, closeUp = false, className }: BunnyProps): React.J
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <Blush mood={mood} />
-                <Eyes mood={mood} blinking={blinking} />
+                {/* Fluffy cheeks */}
+                <path
+                  d="M46.5 110.5 Q37 113.5 42.5 119 Q35.5 122.5 45 128"
+                  {...furStroke}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M153.5 110.5 Q163 113.5 157.5 119 Q164.5 122.5 155 128"
+                  {...furStroke}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <Blush mood={face} />
+                <Eyes mood={face} blinking={blinking} gaze={gaze} />
                 <Nose twitching={twitching} />
-                <Mouth mood={mood} />
+                <Mouth mood={face} />
               </motion.g>
 
               <Treats mood={mood} />
             </motion.g>
           </motion.g>
+
+          {/* A heart pops out when poked */}
+          <AnimatePresence>
+            {poked && (
+              <motion.g
+                key={pokeCount}
+                initial={{ y: 6, scale: 0, opacity: 0 }}
+                animate={{ y: -16, scale: 1, opacity: [0, 1, 1, 0] }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1, ease: 'easeOut' }}
+              >
+                <path
+                  transform="translate(150 84) rotate(14) scale(0.95)"
+                  d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 2.9 4.5 6.6 4.5c2.1 0 3.9 1.1 5.4 3 1.5-1.9 3.3-3 5.4-3 3.7 0 5.7 3.8 4.2 7.2C19.5 16.4 12 21 12 21z"
+                  fill="#ff7fa3"
+                />
+              </motion.g>
+            )}
+          </AnimatePresence>
 
           {/* "..." while waiting to be un-paused */}
           <AnimatePresence>

@@ -4,7 +4,7 @@ A tiny, cozy Pomodoro timer with a bunny who keeps you company on your desktop.
 Pastel pink while you focus, mint for short breaks, lavender for long ones.
 
 <p align="center">
-  <img src="docs/screenshots/focus.png" width="240" alt="Focus mode: the bunny concentrates with its ears straight up" />
+  <img src="docs/screenshots/focus.png" width="240" alt="Focus mode: the bunny reads a book with its ears straight up" />
   <img src="docs/screenshots/short-break.png" width="240" alt="Short break: the bunny munches a carrot on a mint background" />
   <img src="docs/screenshots/long-break.png" width="240" alt="Long break: the bunny holds a cup of tea on a lavender background" />
 </p>
@@ -20,7 +20,7 @@ Pastel pink while you focus, mint for short breaks, lavender for long ones.
 ## What it does
 
 - **Three modes**: Focus (25 min), Short Break (5 min) and Long Break (15 min, after every 4 focus sessions). Switch by hand with the tabs at the top.
-- **A bunny with moods**: concentrating while you focus, munching a carrot or sipping tea on breaks, one floppy ear when paused, and a hop with hearts when a session is done. It blinks, twitches its nose and wiggles its ears on its own.
+- **A bunny with moods**: reading with its tongue out while you focus, munching a carrot or sipping tea on breaks, one floppy ear when paused, and a hop with hearts when a session is done. It blinks, twitches its nose and wiggles its ears on its own, follows your cursor with its eyes, and beams if you poke it.
 - **Carrot row**: one carrot per finished focus session; four carrots earn the long break.
 - **Tray / menu bar bunny** showing the time left (next to the icon on macOS, in the tooltip on Windows), with Start/Pause, Reset, Skip and Quit.
 - **Notification and a gentle chime** when a timer ends. The speaker button mutes the chime.
@@ -113,7 +113,7 @@ src/
 └── renderer/src/
     ├── components/      TitleBar, Header, ModeTabs, TimerRing, Countdown, ...
     │   └── Bunny/       Ears, Eyes, Blush, Nose, Mouth, Treats, Hearts
-    ├── hooks/           useCountdown, useBunnyMood, useRandomPulse, ...
+    ├── hooks/           useCountdown, useBunnyMood, useGaze, useRandomPulse, ...
     ├── store/           useTimerStore, useSettingsStore
     └── lib/             Colours per mode, shared springs, the chime
 ```
