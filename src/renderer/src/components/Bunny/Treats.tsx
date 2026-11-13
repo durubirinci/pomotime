@@ -9,7 +9,7 @@ function Carrot(): React.JSX.Element {
       animate={{ x: [0, -1.2, 0], y: [0, -1.2, 0] }}
       transition={{ duration: 0.42, repeat: Infinity, ease: 'easeInOut' }}
     >
-      <g transform="translate(101 131) rotate(-38)">
+      <g transform="translate(101 138) rotate(-38)">
         <path d="M-3 26 Q-9 34 -5 38 Q-2 34 0 28 Q1 36 5 38 Q8 33 3 26Z" fill="#7fcf8f" />
         <path
           d="M0 0 Q3 1 4 5 L7.5 24 Q7 29 0 29 Q-7 29 -7.5 24 L-4 5 Q-3 1 0 0Z"
@@ -34,27 +34,27 @@ function TeaCup(): React.JSX.Element {
   return (
     <g>
       {/* Steam curling upward. */}
-      {[93, 106].map((x, index) => (
+      {[93, 107].map((x, index) => (
         <motion.path
           key={x}
-          d={`M${x} 138 q-4 -5 0 -9 q4 -4 0 -9`}
+          d={`M${x} 152 q-2.5 -2.75 0 -5.5 q2.5 -2.75 0 -5.5`}
           fill="none"
-          stroke="#fff"
-          strokeWidth={2.4}
+          stroke="#b9a2f0"
+          strokeWidth={2.2}
           strokeLinecap="round"
-          animate={{ y: [3, -6], opacity: [0, 0.95, 0] }}
+          animate={{ y: [3, -5], opacity: [0, 0.85, 0] }}
           transition={{ duration: 2.2, repeat: Infinity, delay: index * 0.9, ease: 'easeOut' }}
         />
       ))}
       <path
-        d="M116 147 q10 0 9 7 q-1 6 -11 6"
+        d="M116 161 q10 0 9 7 q-1 6 -11 6"
         fill="none"
         stroke="#b9a2f0"
         strokeWidth={3.2}
         strokeLinecap="round"
       />
       <path
-        d="M82 142 H118 Q118 164 100 164 Q82 164 82 142Z"
+        d="M83 156 H117 Q117 177 100 177 Q83 177 83 156Z"
         fill="#d9ccfa"
         stroke="#b9a2f0"
         strokeWidth={2}
@@ -62,14 +62,18 @@ function TeaCup(): React.JSX.Element {
       />
       <ellipse
         cx={100}
-        cy={142.5}
+        cy={156.5}
         rx={17}
         ry={3.4}
         fill="#c98a5a"
         stroke="#b9a2f0"
         strokeWidth={2}
       />
-      <path d="M100 150 l2.2 3.4 l-2.2 3.4 l-2.2 -3.4Z" fill="#fff" opacity={0.8} />
+      <path
+        d="M100 170.5 C95.6 167.4 97.2 163.6 100 166.1 C102.8 163.6 104.4 167.4 100 170.5Z"
+        fill="#fff"
+        opacity={0.85}
+      />
     </g>
   )
 }
@@ -81,24 +85,24 @@ const PAWS: Record<BunnyMood, [left: [number, number], right: [number, number]]>
     [113, 160]
   ],
   focus: [
-    [87, 159],
-    [113, 159]
+    [87, 160],
+    [113, 160]
   ],
   paused: [
     [87, 160],
     [113, 160]
   ],
   celebrate: [
-    [74, 148],
-    [126, 148]
+    [64, 150],
+    [136, 150]
   ],
   snack: [
-    [108, 147],
-    [121, 153]
+    [105, 156],
+    [120, 159]
   ],
   tea: [
-    [81, 153],
-    [117, 157]
+    [82, 168],
+    [119, 171]
   ]
 }
 
@@ -123,11 +127,11 @@ export function Treats({ mood }: { mood: BunnyMood }): React.JSX.Element {
       {[left, right].map(([cx, cy], index) => (
         <motion.ellipse
           key={index}
-          rx={7.5}
-          ry={6}
+          rx={8}
+          ry={6.2}
           fill={FUR}
           stroke={OUTLINE}
-          strokeWidth={2.2}
+          strokeWidth={2.3}
           initial={false}
           animate={{ cx, cy }}
           transition={SPRING_BOUNCY}
