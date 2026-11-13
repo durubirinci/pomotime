@@ -1,0 +1,47 @@
+name: Build macOS DMG
+
+# Builds the Mac installer on a macOS runner (a DMG cannot be made on Linux or Windows).
+# Runs when started by hand from the Actions tab, when a version tag is pushed,
+# and on pushes to the branch the new bunny was developed on.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+    branches:
+      - claude/vibrant-newton-77dofv
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-mac-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dmg:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck and bundle
+        run: npm run compile
+
+      # One DMG for Apple silicon and one for Intel Macs. There is no Apple
+      # Developer certificate here, so the app is not signed or notarized.
+      - name: Package DMG
+        run: npx electron-builder --mac dmg --arm64 --x64 --publish never
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: POMOTIME-mac-dmg
+          path: dist/*.dmg
+          if-no-files-found: error
