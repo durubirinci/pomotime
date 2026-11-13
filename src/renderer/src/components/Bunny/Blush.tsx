@@ -11,23 +11,18 @@ export function Blush({ mood }: BlushProps): React.JSX.Element {
   const glowing = mood === 'celebrate'
   const cosy = mood === 'snack' || mood === 'tea'
   const animate = {
-    fill: glowing ? '#ff5c8d' : cosy ? '#ffa0ba' : '#ffb3c7',
-    opacity: glowing ? 1 : 0.85,
-    scale: glowing ? 1.35 : cosy ? 1.12 : 1
+    fill: glowing ? '#ff5c8d' : cosy ? '#ff9fba' : '#ffaec4',
+    opacity: glowing ? 1 : 0.9,
+    scale: glowing ? 1.3 : cosy ? 1.1 : 1
   }
   return (
     <g>
-      {[66, 134].map((cx) => (
-        <motion.ellipse
-          key={cx}
-          cx={cx}
-          cy={125}
-          rx={9}
-          ry={5.5}
-          initial={false}
-          animate={animate}
-          transition={SPRING_BOUNCY}
-        />
+      {[62, 138].map((cx) => (
+        <motion.g key={cx} initial={false} animate={animate} transition={SPRING_BOUNCY}>
+          <ellipse cx={cx} cy={133} rx={10} ry={6.2} />
+          {/* A tiny shine so the cheek looks round. */}
+          <ellipse cx={cx - 3} cy={131} rx={3} ry={1.5} fill="#fff" opacity={0.55} />
+        </motion.g>
       ))}
     </g>
   )

@@ -31,7 +31,7 @@ export function MiniView({ countdown }: { countdown: CountdownValue }): React.JS
         strokeWidth={10}
         className="h-[66px] shrink-0"
       >
-        <Bunny mood={mood} className="size-full" />
+        <Bunny mood={mood} closeUp className="size-full" />
       </TimerRing>
       <div className="flex min-w-0 flex-1 flex-col items-center">
         <Countdown clock={countdown.clock} mode={mode} className="text-[29px]" />

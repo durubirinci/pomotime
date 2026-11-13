@@ -2,9 +2,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { SPRING_BOUNCY } from '@renderer/lib/theme'
 import { INK, type BunnyMood } from './types'
 
-const LEFT_X = 82
-const RIGHT_X = 118
-const EYE_Y = 112
+// Wide-set and low on the face: the recipe for a baby-animal look.
+const LEFT_X = 79
+const RIGHT_X = 121
+const EYE_Y = 119
 
 interface OpenEyeProps {
   cx: number
@@ -21,14 +22,17 @@ function OpenEye({ cx, openness, lookX, blinking }: OpenEyeProps): React.JSX.Ele
       animate={{ scaleY: blinking ? 0.08 : openness, x: lookX }}
       transition={blinking ? { duration: 0.07 } : { type: 'spring', stiffness: 420, damping: 16 }}
     >
-      <circle cx={cx} cy={EYE_Y} r={5.6} fill={INK} />
-      <circle cx={cx - 1.8} cy={EYE_Y - 2} r={1.9} fill="#fff" />
+      <ellipse cx={cx} cy={EYE_Y} rx={6.8} ry={7.8} fill={INK} />
+      {/* A warm glow at the bottom of the eye, then two sparkles. */}
+      <ellipse cx={cx} cy={EYE_Y + 3.6} rx={4.2} ry={3} fill="#a0647c" opacity={0.55} />
+      <circle cx={cx - 2.3} cy={EYE_Y - 3} r={2.7} fill="#fff" />
+      <circle cx={cx + 2.6} cy={EYE_Y + 2.6} r={1.2} fill="#fff" opacity={0.9} />
     </motion.g>
   )
 }
 
 function Arc({ d }: { d: string }): React.JSX.Element {
-  return <path d={d} fill="none" stroke={INK} strokeWidth={3} strokeLinecap="round" />
+  return <path d={d} fill="none" stroke={INK} strokeWidth={3.2} strokeLinecap="round" />
 }
 
 interface EyesProps {
@@ -53,14 +57,14 @@ export function Eyes({ mood, blinking }: EyesProps): React.JSX.Element {
             {mood === 'celebrate' ? (
               // ^ ^  squeezed shut with joy
               <>
-                <Arc d={`M${LEFT_X - 6.5} 115 Q${LEFT_X} 105 ${LEFT_X + 6.5} 115`} />
-                <Arc d={`M${RIGHT_X - 6.5} 115 Q${RIGHT_X} 105 ${RIGHT_X + 6.5} 115`} />
+                <Arc d={`M${LEFT_X - 7.5} 123 Q${LEFT_X} 111 ${LEFT_X + 7.5} 123`} />
+                <Arc d={`M${RIGHT_X - 7.5} 123 Q${RIGHT_X} 111 ${RIGHT_X + 7.5} 123`} />
               </>
             ) : (
               // u u  peacefully closed
               <>
-                <Arc d={`M${LEFT_X - 6.5} 110 Q${LEFT_X} 118 ${LEFT_X + 6.5} 110`} />
-                <Arc d={`M${RIGHT_X - 6.5} 110 Q${RIGHT_X} 118 ${RIGHT_X + 6.5} 110`} />
+                <Arc d={`M${LEFT_X - 7.5} 117.5 Q${LEFT_X} 126.5 ${LEFT_X + 7.5} 117.5`} />
+                <Arc d={`M${RIGHT_X - 7.5} 117.5 Q${RIGHT_X} 126.5 ${RIGHT_X + 7.5} 117.5`} />
               </>
             )}
           </motion.g>
@@ -74,13 +78,13 @@ export function Eyes({ mood, blinking }: EyesProps): React.JSX.Element {
             <OpenEye
               cx={LEFT_X}
               // Paused: the eye under the floppy ear droops, the other one peeks.
-              openness={mood === 'paused' ? 0.42 : mood === 'focus' ? 0.8 : 1}
+              openness={mood === 'paused' ? 0.45 : mood === 'focus' ? 0.84 : 1}
               lookX={mood === 'paused' ? 2 : 0}
               blinking={blinking}
             />
             <OpenEye
               cx={RIGHT_X}
-              openness={mood === 'focus' ? 0.8 : 1}
+              openness={mood === 'focus' ? 0.84 : 1}
               lookX={mood === 'paused' ? 2 : 0}
               blinking={blinking}
             />
@@ -98,8 +102,8 @@ export function Eyes({ mood, blinking }: EyesProps): React.JSX.Element {
             exit={{ y: -5, opacity: 0 }}
             transition={SPRING_BOUNCY}
           >
-            <Arc d={`M${LEFT_X - 7} 101 L${LEFT_X + 4} 102.6`} />
-            <Arc d={`M${RIGHT_X + 7} 101 L${RIGHT_X - 4} 102.6`} />
+            <Arc d={`M${LEFT_X - 7} 104.5 L${LEFT_X + 5} 107`} />
+            <Arc d={`M${RIGHT_X + 7} 104.5 L${RIGHT_X - 5} 107`} />
           </motion.g>
         )}
       </AnimatePresence>

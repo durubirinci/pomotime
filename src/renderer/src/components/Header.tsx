@@ -30,7 +30,7 @@ function PeekingEars(): React.JSX.Element {
             rx={6.5}
             ry={15}
             fill="#fff"
-            stroke="#e3bfcc"
+            stroke="#cf9db0"
             strokeWidth={1.6}
           />
           <ellipse cx={cx} cy={18} rx={3} ry={10} fill="#ffb3c7" />

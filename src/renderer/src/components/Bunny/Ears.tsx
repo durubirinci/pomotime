@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { FUR, OUTLINE, PINK, type BunnyMood } from './types'
+import { furStroke, type BunnyMood } from './types'
 
 interface EarPose {
   left: number
@@ -8,12 +8,29 @@ interface EarPose {
 }
 
 const POSES: Record<BunnyMood, EarPose> = {
-  idle: { left: -8, right: 8, stretch: 1 },
-  focus: { left: 0, right: 0, stretch: 1.08 },
-  snack: { left: -17, right: 17, stretch: 0.95 },
-  tea: { left: -22, right: 22, stretch: 0.93 },
-  paused: { left: -122, right: 10, stretch: 1 },
-  celebrate: { left: -13, right: 13, stretch: 1.08 }
+  idle: { left: -10, right: 10, stretch: 1 },
+  focus: { left: -1, right: 1, stretch: 1.07 },
+  snack: { left: -19, right: 19, stretch: 0.95 },
+  tea: { left: -25, right: 25, stretch: 0.93 },
+  paused: { left: -108, right: 12, stretch: 1 },
+  celebrate: { left: -15, right: 15, stretch: 1.07 }
+}
+
+const BASE_Y = 86
+const TIP_Y = 24
+
+/** A leaf-shaped ear: narrow where it meets the head, fullest two thirds up. */
+function earPath(cx: number, inset: number): string {
+  const base = BASE_Y - inset * 1.6
+  const tip = TIP_Y + inset * 1.5
+  const w = 13.5 - inset
+  return [
+    `M${cx} ${base}`,
+    `C${cx - w * 0.85} ${base} ${cx - w * 1.12} ${tip + 32} ${cx - w * 0.9} ${tip + 17}`,
+    `C${cx - w * 0.68} ${tip + 5} ${cx - w * 0.25} ${tip} ${cx} ${tip}`,
+    `C${cx + w * 0.25} ${tip} ${cx + w * 0.68} ${tip + 5} ${cx + w * 0.9} ${tip + 17}`,
+    `C${cx + w * 1.12} ${tip + 32} ${cx + w * 0.85} ${base} ${cx} ${base}Z`
+  ].join(' ')
 }
 
 interface EarProps {
@@ -32,8 +49,8 @@ function Ear({ cx, rotate, stretch }: EarProps): React.JSX.Element {
       // Loose spring: the ear overshoots and settles, which reads as floppy.
       transition={{ type: 'spring', stiffness: 170, damping: 9, mass: 0.9 }}
     >
-      <ellipse cx={cx} cy={50} rx={13} ry={32} fill={FUR} stroke={OUTLINE} strokeWidth={2.5} />
-      <ellipse cx={cx} cy={53} rx={6.5} ry={22} fill={PINK} opacity={0.75} />
+      <path d={earPath(cx, 0)} {...furStroke} />
+      <path d={earPath(cx, 6)} fill="url(#bunny-ear)" />
     </motion.g>
   )
 }
@@ -49,8 +66,8 @@ export function Ears({ mood, wiggling }: EarsProps): React.JSX.Element {
   const nudge = wiggling && mood !== 'paused' ? 9 : 0
   return (
     <g>
-      <Ear cx={80} rotate={pose.left - nudge} stretch={pose.stretch} />
-      <Ear cx={120} rotate={pose.right + (wiggling ? 9 : 0)} stretch={pose.stretch} />
+      <Ear cx={75} rotate={pose.left - nudge} stretch={pose.stretch} />
+      <Ear cx={125} rotate={pose.right + (wiggling ? 9 : 0)} stretch={pose.stretch} />
     </g>
   )
 }

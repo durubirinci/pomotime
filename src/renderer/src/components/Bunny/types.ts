@@ -12,7 +12,10 @@ export type BunnyMood =
   /** Session complete: deep blush, hopping, hearts. */
   | 'celebrate'
 
-export const FUR = '#ffffff'
-export const OUTLINE = '#e3bfcc'
-export const INK = '#5d4452'
+/** Fur is a soft top-to-bottom gradient defined once in the bunny's <defs>. */
+export const FUR = 'url(#bunny-fur)'
+export const OUTLINE = '#cf9db0'
+export const INK = '#4f3644'
 export const PINK = '#ffb3c7'
+
+export const furStroke = { fill: FUR, stroke: OUTLINE, strokeWidth: 2.6 } as const

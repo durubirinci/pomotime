@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { SPRING_BOUNCY } from '@renderer/lib/theme'
-import { FUR, OUTLINE, type BunnyMood } from './types'
+import { furStroke, type BunnyMood } from './types'
 
 function Carrot(): React.JSX.Element {
   return (
@@ -9,7 +9,7 @@ function Carrot(): React.JSX.Element {
       animate={{ x: [0, -1.2, 0], y: [0, -1.2, 0] }}
       transition={{ duration: 0.42, repeat: Infinity, ease: 'easeInOut' }}
     >
-      <g transform="translate(101 131) rotate(-38)">
+      <g transform="translate(101 138) rotate(-20) scale(1.2)">
         <path d="M-3 26 Q-9 34 -5 38 Q-2 34 0 28 Q1 36 5 38 Q8 33 3 26Z" fill="#7fcf8f" />
         <path
           d="M0 0 Q3 1 4 5 L7.5 24 Q7 29 0 29 Q-7 29 -7.5 24 L-4 5 Q-3 1 0 0Z"
@@ -32,7 +32,7 @@ function Carrot(): React.JSX.Element {
 
 function TeaCup(): React.JSX.Element {
   return (
-    <g>
+    <g transform="translate(0 6)">
       {/* Steam curling upward. */}
       {[93, 106].map((x, index) => (
         <motion.path
@@ -77,28 +77,28 @@ function TeaCup(): React.JSX.Element {
 /** Where each paw rests for a given mood. */
 const PAWS: Record<BunnyMood, [left: [number, number], right: [number, number]]> = {
   idle: [
-    [87, 160],
-    [113, 160]
+    [88, 165],
+    [112, 165]
   ],
   focus: [
-    [87, 159],
-    [113, 159]
+    [89, 163],
+    [111, 163]
   ],
   paused: [
-    [87, 160],
-    [113, 160]
+    [88, 165],
+    [112, 165]
   ],
   celebrate: [
-    [74, 148],
-    [126, 148]
+    [66, 150],
+    [134, 150]
   ],
   snack: [
-    [108, 147],
-    [121, 153]
+    [98, 162],
+    [119, 158]
   ],
   tea: [
-    [81, 153],
-    [117, 157]
+    [81, 159],
+    [117, 163]
   ]
 }
 
@@ -123,11 +123,10 @@ export function Treats({ mood }: { mood: BunnyMood }): React.JSX.Element {
       {[left, right].map(([cx, cy], index) => (
         <motion.ellipse
           key={index}
-          rx={7.5}
-          ry={6}
-          fill={FUR}
-          stroke={OUTLINE}
-          strokeWidth={2.2}
+          rx={7.8}
+          ry={6.4}
+          {...furStroke}
+          strokeWidth={2.3}
           initial={false}
           animate={{ cx, cy }}
           transition={SPRING_BOUNCY}
