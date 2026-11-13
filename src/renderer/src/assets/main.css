@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-bubbly: 'Fredoka', ui-rounded, 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --color-cocoa: #7a5766;
+  --color-cocoa-soft: #b3909f;
+  --color-cream: #fffaf7;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  /* The window itself is transparent; the app draws its own rounded card. */
+  background: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+body {
+  font-family: var(--font-bubbly);
+  color: var(--color-cocoa);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--deep);
+  outline-offset: 2px;
+}
+
+/* Frameless window: these regions move the window when dragged. */
+.drag {
+  -webkit-app-region: drag;
+}
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.polka {
+  background-image: radial-gradient(rgb(255 255 255 / 0.55) 3px, transparent 3.5px);
+  background-size: 26px 26px;
+}
