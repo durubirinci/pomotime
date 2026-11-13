@@ -16,6 +16,11 @@ asarUnpack:
 mac:
   target: dmg
   category: public.app-category.productivity
+  # No Apple Developer certificate yet, so sign ad-hoc ("-"). Without any
+  # signature, a downloaded copy is reported as "damaged" on Apple silicon.
+  # Hardened runtime is only needed for notarization and breaks ad-hoc builds.
+  identity: '-'
+  hardenedRuntime: false
   notarize: false
 dmg:
   artifactName: POMOTIME-${version}-${arch}.${ext}
